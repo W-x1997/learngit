@@ -1,0 +1,65 @@
+首先在github上新建一个你要上传代码的仓库
+
+确认认证的公钥是否正确
+
+ssh -T git@github.com
+
+如果成功提示:
+
+You've successfully authenticated, but GitHub does not provide shell access.
+
+然后cd到你要上传的项目的文件夹下
+
+
+touch README.md //新建一个记录提交操作的文档
+git init //初始化本地仓库
+git add README.md //添加
+git add *  //加入所有项目
+git status //检查状态 如果都是绿的 证明成功
+git commit -m "first commit"//提交到要地仓库，并写一些注释
+git remote add origin git@github.com:youname/Test.git //连接远程仓库并建了一个名叫：origin的别名
+git push -u origin master //将本地仓库的东西提交到地址是origin的地址，master分支下
+
+
+***********************
+问题1:
+  ***注意 一般先pull再push 避免冲突问题
+提示使用 git pull 之后在 push
+使用如下命令解决：
+
+$ git pull --rebase origin master
+warning: no common commits
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:hahah/ftpmanage
+ * branch            master     -> FETCH_HEAD
+ * [new branch]      master     -> origin/master
+First, rewinding head to replay your work on top of it...
+Applying: init files
+复制代码
+继续push，成功。
+
+问题2:Cannot rebase: You have unstaged changes.
+那说明你有修改过的文件
+git stash
+git pull --rebase （每次push之前最好这样做一次）
+git push ....
+之后用git stash pop stash
+
+
+问题3:解决github访问及上传慢的问题
+
+解决方法
+
+绕过dns解析，在本地直接绑定host，该方法也可加速其他因为CDN被屏蔽导致访问慢的网站。
+
+
+在本地host文件中添加映射
+打开 http://tool.chinaz.com/dns ,这是一个查询域名映射关系的工具
+
+查询 github.global.ssl.fastly.net 和 assets-cdn.github.com 两个地址
+
+多查几次，选择一个稳定，延迟较低的 ip 按如下方式添加到host文件
+
+保存文件，重新打开浏览器，起飞。
