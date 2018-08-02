@@ -1,0 +1,132 @@
+git init
+
+git config --global user.name "Your Name"
+$ git config --global user.email "email@example.com"
+
+
+git add a.txt
+
+
+git commit -m"备注信息"
+
+git status命令可以让我们时刻掌握仓库当前的状态，文件是否被修改过
+
+git diff    查看修改了什么内容
+
+git log     查看修改记录
+
+cat a.txt	在当前视图下查看a.txt文件的内容
+
+git log --pretty=oneline   用单行显示修改的记录
+
+git reset --hard head^ 		回退到上一个版本
+
+git reset --hard d47bacd        回退到指定的版本(或者回退之后后悔了，还可以前进至d47bacd版本)
+
+git reflog    查看所有的操作记录，包括commit和reset等，每一个记录都有一项id,假设有一项操作记录的id是8d0ee72
+
+git reset --hard 8d0ee72	回退到8d0ee72那个操作记录对应的版本
+
+情景一：已经修改了a.txt文件内容，不过还没有add进暂存区，想放弃修改：
+git checkout -- a.txt
+
+情景二：已经修改了a.txt文件内容，并且add进了暂存区，想放弃修改：
+先git reset head a.txt  ,此时就回到情景一，然后git checkout -- a.txt
+
+删除文件：rm a.txt
+git rm a.txt
+git commit --m"..."
+
+创建RSA密钥：
+ssh-keygen -t rsa -C "421980589@qq.com"
+
+添加远程仓库关联：
+git remote add origin git@github.com:W-x1997/learngit
+(learngit是远程仓库的名称，不一定要和本地文件夹同名)
+
+移除远程仓库关联：
+git remote rm origin
+
+git remote -v
+查看当前关联的远程仓库名
+
+向远程仓库提交：
+git push -u origin master
+(一次关联后，以后推送至远端只要使用git push origin master就可以)
+（如果遇到pull first 的错误提示可以使用git push -f origin master强制提交）
+
+
+克隆远端的某个仓库到当前目录下：
+git clone git@github.com:W-x1997/clonetest
+(这就把远端仓库名为clonetest的仓库克隆了下来)
+
+
+**************************
+创建分支：
+git branch dev
+(分支名称为dev)
+
+切换分支:
+git checkout dev
+
+创建并切换分支"dev"：
+git checkout -b dev
+
+查看当前有哪些分支：
+git branch 
+
+dev分支与master分支合并：
+git merge dev
+
+删除分支：
+git branch -d dev
+
+查看分支合并图：
+git log --graph
+
+在merge的时候禁用fastforward模式：
+git merge --no-ff -dev
+(将dev分支合并)
+
+将一个旧的分支old_branch中已经commit的代码(假设这个commit的log标志为ffxzfz)移动到新分支new_branch去：
+先切换到新建立的分支new_branch，执行git chery-pick ffxzfz 
+然后切换到old_branch中，将版本回退到上一个版本。完成commit 的分支转移！
+
+跟踪分支：
+（创建一个origin仓库branch1分支的跟踪分支，当输入git pull时，本地分支会向远程分支进行拉取操作。）
+git checkout --track origin/branch1
+
+
+变基：Rebase
+将分支branch1在master的基础上进行变基
+git rebase master branch1
+
+储藏工作（储藏是针对于那些已经被add的文件）：
+（当在一个分支工作了一段时间后，还不想进行提交。此时需要切换到另一个分支，当前分支处于脏目录）
+git stash 
+此时可以切换到其他分支进行工作。
+
+查看当前存储区中的东西列表：
+git stash list
+
+恢复现场：
+git stash apply (默认恢复为最近一次的stash)
+git stash apply stash@{2}(恢复为标记为2的stash)
+
+删除stash列表中的第3项：
+git stash drop stash@{3}
+
+
+使用最近期的stash，并从stash存储栈上删除:
+git stash pop
+
+清理工作目录：
+（如果不想储存工作中产生的文件，则进行清理。注意：git clean 删除的是未被add的那些文件）
+git clean -f 
+可使用git clean -n （会提示将会删除哪些文件）
+
+修改commit 中的提交信息(只能修改上一次commit的备注信息)：
+git commit --amend
+
+如果要修改前面第n次的commit记录，则要使用:
+git rebase -i [commit-id]
